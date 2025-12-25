@@ -1,0 +1,184 @@
+/* Active Side Lighting for Battle Split-Screen */
+#p1-zone.active-blue {
+    box-shadow: 0 0 60px 20px #00f2ff, 0 0 120px 40px #0af inset;
+    filter: saturate(1.2) brightness(1.1);
+    z-index: 2;
+}
+#p2-zone.active-yellow {
+    box-shadow: 0 0 60px 20px #ffe066, 0 0 120px 40px #ffd700 inset;
+    filter: saturate(1.2) brightness(1.1);
+    z-index: 2;
+}
+/* Neon & Glassmorphism Theme + Leaderboard Table */
+:root {
+    --neon-red: #ff0055;
+    --neon-cyan: #00f2ff;
+    --dark-bg: #0d0221;
+    --glass-bg: rgba(255, 255, 255, 0.05);
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: white;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: 
+        linear-gradient(rgba(13, 2, 33, 0.8), rgba(13, 2, 33, 0.8)),
+        repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 242, 255, 0.03) 3px);
+}
+
+h1, h2 {
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    color: var(--neon-cyan);
+    text-shadow: 0 0 10px var(--neon-cyan);
+}
+
+/* Glassmorphism Containers */
+#registration, #game-container, #leaderboard-container {
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 30px;
+    margin-top: 20px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    width: 80%;
+    max-width: 800px;
+}
+
+/* Input Fields */
+input {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--neon-cyan);
+    color: white;
+    padding: 12px;
+    margin: 10px;
+    border-radius: 5px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus {
+    box-shadow: 0 0 15px var(--neon-cyan);
+}
+
+/* Neon Buttons */
+button {
+    background: transparent;
+    border: 2px solid var(--neon-red);
+    color: var(--neon-red);
+    padding: 15px 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 5px;
+    margin: 10px;
+}
+
+button:hover {
+    background: var(--neon-red);
+    color: white;
+    box-shadow: 0 0 20px var(--neon-red);
+}
+
+/* BPM Display Special Glow */
+.bpm-display {
+    font-size: 5rem;
+    font-family: 'Courier New', Courier, monospace;
+    color: var(--neon-red);
+    text-shadow: 0 0 20px var(--neon-red);
+}
+
+/* Leaderboard Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th {
+    color: var(--neon-cyan);
+    border-bottom: 2px solid var(--neon-cyan);
+    padding: 10px;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.winner-tag {
+    color: #ffde00;
+    font-weight: bold;
+}
+body {
+    background: #0d0221;
+    color: #00ffcc;
+    font-family: 'Courier New', Courier, monospace;
+    text-align: center;
+}
+
+.player-box {
+    border: 2px solid #ff0055;
+    padding: 20px;
+    margin: 20px;
+    display: inline-block;
+    width: 250px;
+}
+
+.bpm-display {
+    font-size: 3rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00ffcc;
+}
+
+#timer-display {
+    font-size: 4rem;
+    color: #ff0055;
+    margin: 20px;
+}
+
+button {
+    background: #ff0055;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+/* Leaderboard Table Styling */
+#leaderboardTable {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+#leaderboardTable th, #leaderboardTable td {
+    padding: 15px;
+    border-bottom: 1px solid #ff0055;
+    text-align: center;
+}
+
+.winner-tag {
+    color: #00ffcc;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+/* Registration Inputs */
+input {
+    background: #1a1a1a;
+    border: 1px solid #00ffcc;
+    color: white;
+    padding: 10px;
+    margin: 5px;
+    border-radius: 5px;
+}

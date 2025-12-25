@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Heartbreaker - Photobooth</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+
+    <div class="photobooth-page" style="display: flex; height: 100vh; background: #0d1b2a; color: white; font-family: 'Segoe UI', sans-serif;">
+        <div class="capture-section" style="flex: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; border-right: 2px solid #1b263b;">
+            <h1 style="font-size: 3rem; margin-bottom: 10px;">Players Photobooth</h1>
+            <h2 id="capture-status" style="color: #e63946; margin-bottom: 30px; font-weight: bold;">Ready Player 1?</h2>
+            <div class="video-wrap" style="position: relative; width: 100%; max-width: 900px; aspect-ratio: 16/9; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+                <video id="webcam" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover;"></video>
+                <div style="position: absolute; top: 20px; left: 20px; background: rgba(230, 57, 70, 0.8); padding: 5px 15px; border-radius: 5px; font-size: 0.8rem;">● LIVE</div>
+            </div>
+            <div class="button-group" style="margin-top: 40px; display: flex; gap: 20px;">
+                <button id="snap-btn" style="background: #415a77; color: white; border: none; padding: 15px 40px; border-radius: 10px; font-size: 1.2rem; cursor: pointer; transition: 0.3s;">📸 CAPTURE</button>
+                <button id="retake-btn" style="display: none; background: #1b263b; color: #778da9; border: 1px solid #415a77; padding: 15px 40px; border-radius: 10px; font-size: 1.2rem; cursor: pointer;">🔄 RETAKE</button>
+                <button id="finish-btn" onclick="resetBooth()" style="background: #1b263b; color: #778da9; border: none; padding: 15px 40px; border-radius: 10px; font-size: 1.2rem; cursor: pointer;">FINISH</button>
+            </div>
+        </div>
+        <div class="preview-section" style="flex: 1; background: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">
+            <div class="frame-container" style="position: relative; width: 100%; max-width: 350px; aspect-ratio: 3375 / 6000; box-shadow: 0 0 20px rgba(0,0,0,0.2);">
+                <canvas id="preview-canvas" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; background: #eee;"></canvas>
+                <img id="frame-overlay" src="assets/frame.png" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none;">
+            </div>
+            <p style="color: #1b263b; margin-top: 20px; font-weight: bold;">PREVIEW</p>
+        </div>
+    </div>
+
+    <canvas id="final-canvas" style="display: none;"></canvas>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="js/firebase-config.js"></script>
+    <script src="js/photobooth.js"></script>
+</body>
+</html>
