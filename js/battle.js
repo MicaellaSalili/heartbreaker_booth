@@ -349,7 +349,7 @@ async function determineWinner() {
                 `;
             } else {
                 btnRow.innerHTML = `
-                    <button id="try-again-btn" class="overlay-buttons">TRY AGAIN</button>
+                    <button id="try-again-btn" class="overlay-buttons">Retry</button>
                     <button id="back-home-btn" class="overlay-buttons">Home</button>
                 `;
             }

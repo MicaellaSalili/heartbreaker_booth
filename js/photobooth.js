@@ -36,6 +36,49 @@ const pCtx = previewCanvas.getContext('2d');
 const frame = new Image();
 frame.src = 'assets/frame.png';
 
+// Timer overlay
+let timerOverlay = null;
+function showTimer(seconds, callback) {
+    if (!timerOverlay) {
+        timerOverlay = document.createElement('div');
+        timerOverlay.id = 'timer-overlay';
+        timerOverlay.style.position = 'absolute';
+        timerOverlay.style.top = '50%';
+        timerOverlay.style.left = '50%';
+        timerOverlay.style.transform = 'translate(-50%, -50%)';
+        timerOverlay.style.zIndex = '10';
+        timerOverlay.style.background = 'rgba(0,0,0,0.0)';
+        timerOverlay.style.color = '#fff';
+        timerOverlay.style.fontSize = '6rem';
+        timerOverlay.style.fontWeight = 'bold';
+        timerOverlay.style.borderRadius = '50%';
+        timerOverlay.style.width = '180px';
+        timerOverlay.style.height = '180px';
+        timerOverlay.style.display = 'flex';
+        timerOverlay.style.alignItems = 'center';
+        timerOverlay.style.justifyContent = 'center';
+        timerOverlay.style.border = '10px solid #fff';
+        timerOverlay.style.boxSizing = 'border-box';
+        timerOverlay.style.pointerEvents = 'none';
+        // Attach to video-wrap
+        const videoWrap = document.querySelector('.video-wrap');
+        if (videoWrap) videoWrap.appendChild(timerOverlay);
+    }
+    let timeLeft = seconds;
+    timerOverlay.innerText = timeLeft;
+    timerOverlay.style.display = 'flex';
+    const interval = setInterval(() => {
+        timeLeft--;
+        if (timeLeft > 0) {
+            timerOverlay.innerText = timeLeft;
+        } else {
+            clearInterval(interval);
+            timerOverlay.style.display = 'none';
+            if (callback) callback();
+        }
+    }, 1000);
+}
+
 let snapshots = [null, null]; 
 let currentStep = 0; // 0 for Player 1, 1 for Player 2
 
@@ -47,6 +90,7 @@ frame.onload = () => {
 };
 
 document.getElementById('snap-btn').onclick = () => takeSnapshot();
+document.getElementById('snap-btn').onclick = () => startCaptureWithTimer();
 document.getElementById('retake-btn').onclick = () => retake();
 
 function takeSnapshot() {
@@ -57,6 +101,44 @@ function takeSnapshot() {
     const tCtx = tempCanvas.getContext('2d');
     tCtx.drawImage(video, 0, 0);
     
+    snapshots[currentStep] = tempCanvas;
+    updatePreview();
+
+    // Show Retake option and Next/Download option
+    document.getElementById('retake-btn').style.display = 'inline-block';
+    const snapBtn = document.getElementById('snap-btn');
+
+    if (currentStep === 0) {
+        snapBtn.innerText = "NEXT: PLAYER 2 ➡️";
+        snapBtn.onclick = () => startPlayer2();
+    } else {
+        snapBtn.innerText = "📥 DOWNLOAD RESULT";
+        snapBtn.onclick = () => downloadFinal();
+    }
+}
+
+function startCaptureWithTimer() {
+    // Disable snap button during timer
+    const snapBtn = document.getElementById('snap-btn');
+    snapBtn.disabled = true;
+    showTimer(5, () => {
+        snapBtn.disabled = false;
+        takeSnapshot();
+    });
+}
+
+function takeSnapshot() {
+    // Capture the current frame from video, mirrored
+    const tempCanvas = document.createElement('canvas');
+    tempCanvas.width = video.videoWidth;
+    tempCanvas.height = video.videoHeight;
+    const tCtx = tempCanvas.getContext('2d');
+    // Mirror horizontally
+    tCtx.save();
+    tCtx.translate(tempCanvas.width, 0);
+    tCtx.scale(-1, 1);
+    tCtx.drawImage(video, 0, 0);
+    tCtx.restore();
     snapshots[currentStep] = tempCanvas;
     updatePreview();
 
@@ -165,6 +247,11 @@ function updatePreview() {
         pCtx.drawImage(snapshots[1], 0, sY, sW, sH, 195, 3180, 2985, 1680);
     }
 }
+
+// Mirror the video preview
+video.addEventListener('loadedmetadata', () => {
+    video.style.transform = 'scaleX(-1)';
+});
 
 function downloadFinal() {
     const finalCanvas = document.getElementById('final-canvas');
