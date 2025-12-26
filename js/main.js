@@ -2,25 +2,19 @@
 const leaderboardRef = db.collection("leaderboard");
 
 function loadLeaderboard() {
-    // We order by the winner's score in Ascending order (lowest BPM first)
-    // We limit to top 10 to keep the UI clean
-    leaderboardRef.orderBy("p1Score", "asc").limit(10).onSnapshot((snapshot) => {
+    // Show the highest BPM ever recorded (descending order)
+    leaderboardRef.orderBy("score", "desc").limit(10).onSnapshot((snapshot) => {
         const tableBody = document.getElementById('leaderboardBody');
-        tableBody.innerHTML = ""; // Clear existing data
-
+        tableBody.innerHTML = "";
         let rank = 1;
         snapshot.forEach((doc) => {
             const data = doc.data();
-            
-            // Determine who was actually calmer to display their specific score
-            const bestScore = Math.min(data.p1Score, data.p2Score);
-            
             const row = `
                 <tr>
                     <td>${rank++}</td>
-                    <td>${data.p1Name} vs ${data.p2Name}</td>
-                    <td>${bestScore} BPM</td>
-                    <td><span class="winner-tag">${data.winner} Won!</span></td>
+                    <td>${data.name || data.p1Name || 'Player'}</td>
+                    <td>${data.score || data.p1Score || 0} BPM</td>
+                    <td>${data.status || (data.winner ? (data.winner + ' Won!') : '')}</td>
                 </tr>
             `;
             tableBody.innerHTML += row;

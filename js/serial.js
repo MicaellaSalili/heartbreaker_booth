@@ -28,8 +28,9 @@ function startSimulation() {
     console.log("Simulated Heart Rate Monitor Started...");
 
     simInterval = setInterval(() => {
-        // Generates a random BPM between 65 and 95
-        const fakeBPM = Math.floor(Math.random() * (95 - 65 + 1)) + 65;
+        // FOR TESTING: Always generate high BPM (55-120)
+        let fakeBPM = Math.floor(Math.random() * (120 - 55 + 1)) + 55;
+        console.log("Generated BPM for testing:", fakeBPM);
         parseBPM(fakeBPM.toString());
     }, 1000); // Sends data every 1 second
 }

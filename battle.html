@@ -14,7 +14,7 @@
                 <p style="color: white; font-size: 2rem;">BPM</p>
             </div>
         </div>
-        <button onclick="goToPhotobooth()" style="margin-top: 40px; padding: 30px 80px; background: #00f2ff; border: none; border-radius: 60px; font-weight: 900; font-size: 2.5rem; cursor: pointer; color: black; box-shadow: 0 10px 30px rgba(0, 242, 255, 0.4);">
+        <button onclick="console.log('=== STATIC HTML BUTTON CLICKED ==='); goToPhotobooth();" style="margin-top: 40px; padding: 30px 80px; background: #00f2ff; border: none; border-radius: 60px; font-weight: 900; font-size: 2.5rem; cursor: pointer; color: black; box-shadow: 0 10px 30px rgba(0, 242, 255, 0.4);">
             📸 GO TO PHOTOBOOTH
         </button>
     </div>
@@ -104,7 +104,20 @@
     <script src="js/leaderboard.js"></script>
     <script>
         // Initialize real-time leaderboard sync for the sidebar (Top 5 only)
-        syncSidebarLeaderboard();
+        // Wait for Firebase to be fully initialized
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                try {
+                    if (typeof syncSidebarLeaderboard === 'function') {
+                        syncSidebarLeaderboard();
+                    } else {
+                        console.warn('syncSidebarLeaderboard function not found');
+                    }
+                } catch (error) {
+                    console.error('Error initializing leaderboard sync:', error);
+                }
+            }, 1000); // Wait 1 second for all scripts to load
+        });
     </script>
 </body>
 </html>
