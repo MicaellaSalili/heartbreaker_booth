@@ -1,65 +1,52 @@
-<style>
-    #leaderboard-list td {
-        padding: 12px;
-        width: 14%;
-        text-align: center;
-        border-bottom: 1px solid #415a77;
-    }
-    .leaderboard-table {
-        width: 100%;
-        border-collapse: collapse;
-        table-layout: fixed;
-    }
-</style>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Heartbreaker Booth</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    
-    <div style="width: 100%; display: flex; flex-direction: column; align-items: center; padding: 20px 0; background: transparent;">
-        <h2 style="color: #00f2ff; text-shadow: 0 0 10px #00f2ff; letter-spacing: 3px; margin-bottom: 20px; font-size: 1.8rem;">
-            The Heartbreaker Test: How Fast Is Your BPM?
-        </h2>
-        <div style="width: 95%; display: flex; gap: 15px; margin-bottom: 10px;">
-            <input type="text" id="p1-name" placeholder="Name" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #00f2ff; color: white; border-radius: 5px;">
-            <input type="text" id="p1-section" placeholder="Section" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #00f2ff; color: white; border-radius: 5px;">
-            <input type="email" id="p1-email" placeholder="Email" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #00f2ff; color: white; border-radius: 5px;">
-        </div>
-        <div style="width: 90%; height: 1px; background: rgba(0, 242, 255, 0.2); margin: 10px 0;"></div>
-        <div style="width: 95%; display: flex; gap: 15px; margin-bottom: 20px;">
-            <input type="text" id="p2-name" placeholder="Name" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #00f2ff; color: white; border-radius: 5px;">
-            <input type="text" id="p2-section" placeholder="Section" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #00f2ff; color: white; border-radius: 5px;">
-            <input type="email" id="p2-email" placeholder="Email" style="flex: 1; padding: 12px; background: rgba(255,255,255,0.05); border: 1px solid #00f2ff; color: white; border-radius: 5px;">
-        </div>
-        <button onclick="startChallenge()" style="width: 300px; padding: 15px; background: #ff0055; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 1.2rem; cursor: pointer; box-shadow: 0 0 15px #ff0055;">
-            START CHALLENGE
-        </button>
+    <div class="checkerboard-header"></div>
+    <div class="checkerboard-header-2"></div>
+    <div class="red-header">
+        <span>The Heartbreaker Test: How Fast Is Your BPM?</span>
     </div>
-
-    <div style="width: 100%; background: rgba(13, 27, 42, 0.9); border-top: 2px solid #00f2ff; padding-top: 20px;">
-        <h2 style="text-align: center; color: #ffde00; letter-spacing: 2px; margin-bottom: 20px;">🏆 LEADERBOARD 🏆</h2>
-        <table style="width: 100%; border-collapse: collapse; color: white; text-align: center; table-layout: fixed;">
-            <thead style="background: #1b263b; color: #00f2ff; text-transform: uppercase; font-size: 0.85rem;">
-                <tr>
-                    <th style="padding: 15px; width: 8%;">Rank</th>
-                    <th style="width: 18%;">Name</th>
-                    <th style="width: 10%;">Score</th>
-                    <th style="width: 12%;">Status</th>
-                    <th style="width: 25%;">Match</th>
-                    <th style="width: 15%;">Section</th>
-                    <th style="width: 12%;">Time</th>
-                </tr>
-            </thead>
-            <tbody id="leaderboard-list">
-            </tbody>
-        </table>
-    </div>
-
-    
-
+        <div class="hb-form-container">
+            <form class="hb-form" onsubmit="startChallenge(); return false;">
+                <div class="hb-form-row">
+                    <input type="text" id="p1-name" placeholder="ex. Steve Harrington" required>
+                    <input type="text" id="p1-section" placeholder="ex. BSCpE 4-6" required>
+                    <input type="email" id="p1-email" placeholder="ex. name@gmail.com" required>
+                </div>
+                <div class="hb-form-row">
+                    <input type="text" id="p2-name" placeholder="ex. Ilya Rozanov" required>
+                    <input type="text" id="p2-section" placeholder="ex. BSCpE 4-6" required>
+                    <input type="email" id="p2-email" placeholder="ex. name@gmail.com" required>
+                </div>
+                <button type="submit" class="hb-btn">START CHALLENGE</button>
+            </form>
+        </div>
+        <div class="leaderboard-section">
+            <div class="leaderboard-title">LEADERBOARD</div>
+            <div class="leaderboard-table-container">
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th>RANK</th>
+                            <th>NAME</th>
+                            <th>SCORE</th>
+                            <th>STATUS</th>
+                            <th>TEAM</th>
+                            <th>SECTION</th>
+                            <th>TIME</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-list"></tbody>
+                </table>
+            </div>
+        </div>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     <script src="js/firebase-config.js"></script>

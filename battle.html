@@ -1,4 +1,69 @@
-    <!-- High-Legibility Match Results Overlay -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Heartbreaker - Battle</title>
+    <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Red Header -->
+    <div class="battle-header">HEARTBREAK BATTLE</div>
+
+    <!-- Main Battle Container -->
+    <div class="battle-container">
+        <!-- Left Side: Controls & Graph -->
+        <div class="battle-left">
+            <div class="battle-status-area">
+                <h2 id="status-text">Connect Arduino to Start</h2>
+                <button id="connect-btn" class="connect-btn">Connect Heart Sensor</button>
+            </div>
+
+            <!-- Graph Container -->
+            <div class="graph-wrapper">
+                <div id="graph-container" class="graph-container">
+                    <canvas id="liveGraph"></canvas>
+                </div>
+            </div>
+
+            <!-- Timer -->
+            <div class="timer-wrapper">
+                <div id="timer-display" class="timer-display">20s</div>
+            </div>
+        </div>
+
+        <!-- Center Divider -->
+        <div class="battle-divider"></div>
+
+        <!-- Right Side: Player Zones -->
+        <div class="battle-right">
+            <!-- Player 1 Zone (Top) -->
+            <div id="p1-zone" class="player-zone player-zone-top">
+                <div class="player-box" id="p1-area">
+                    <h3 id="p1-name-display" class="player-name">Player 1</h3>
+                    <div class="bpm-display" id="p1-bpm">--</div>
+                    <p class="player-record">Record: <span id="p1-result">0</span> BPM</p>
+                </div>
+                <button id="start-p1-btn" onclick="startTurn(1)" class="player-start-btn">Start Player 1</button>
+            </div>
+
+
+            <!-- Player 2 Zone (Bottom) -->
+            <div id="p2-zone" class="player-zone player-zone-bottom">
+                <div class="player-box" id="p2-area">
+                    <h3 id="p2-name-display" class="player-name">Player 2</h3>
+                    <div class="bpm-display" id="p2-bpm">--</div>
+                    <p class="player-record">Record: <span id="p2-result">0</span> BPM</p>
+                </div>
+                <button id="start-p2-btn" onclick="startTurn(2)" class="player-start-btn player-start-btn-disabled">Start Player 2</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Match Results Overlay -->
     <div id="match-results-overlay" style="display: none; position: fixed; inset: 0; background: #050a0f; z-index: 1000; flex-direction: column; align-items: center; justify-content: center;">
         <div style="display: flex; width: 100%; height: 75vh;">
             <div id="winner-side" style="flex: 1; background: #06331a; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 5px solid #00ff88;">
@@ -18,78 +83,35 @@
             📸 GO TO PHOTOBOOTH
         </button>
     </div>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>The Heartbreaker - Battle</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
 
-    <div style="display: flex; width: 100vw; height: 100vh; align-items: stretch; margin: 0; padding: 0;">
-        <!-- Player 1 Zone -->
-        <div id="p1-zone" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: box-shadow 0.3s, opacity 0.3s; background: linear-gradient(135deg, #0ff 0%, #0af 100%);">
-            <div class="player-box" id="p1-area" style="width: 80%; max-width: 400px; margin-bottom: 30px;">
-                <h3 id="p1-name-display">Player 1</h3>
-                <div class="bpm-display" id="p1-bpm">--</div>
-                <p>Record: <span id="p1-result">0</span> BPM</p>
+    <!-- Results Sidebar (hidden by default) -->
+    <div id="results-sidebar" style="display: none; position: fixed; right: 0; top: 0; width: 320px; height: 100vh; background: rgba(13, 27, 42, 0.95); border-left: 1px solid #00f2ff; padding: 15px; flex-direction: column; z-index: 100;">
+        <h2 style="color: #00f2ff; text-align: center; font-size: 1.2rem; margin-top: 0;">MATCH RESULTS</h2>
+        <div style="margin-bottom: 15px; border-bottom: 1px solid #415a77; padding-bottom: 10px;">
+            <div style="display: flex; justify-content: space-between; color: #e63946; font-weight: bold;">
+                <span id="side-p1-name"></span> <span id="side-p1-score" style="color: white;"></span>
             </div>
-            <button id="start-p1-btn" onclick="startTurn(1)" style="margin-bottom: 20px;">START PLAYER 1</button>
-        </div>
-
-        <!-- Center Controls and Graph -->
-        <div style="width: 2px; background: #222831; opacity: 0.2;"></div>
-        <div style="flex: 0.8; display: flex; flex-direction: column; align-items: center; justify-content: center; background: transparent;">
-            <h2 id="status-text">Connect Arduino to Start</h2>
-            <button id="connect-btn">🔌 Connect Heart Sensor</button>
-            <div id="graph-container" style="width: 100%; max-width: 350px; height: 180px; margin: 20px 0;">
-                <canvas id="liveGraph"></canvas>
-            </div>
-            <div class="controls-area" style="display: flex; flex-direction: column; align-items: center; gap: 20px;">
-                <div id="timer-display" style="font-size: 3rem; color: #e63946;">20s</div>
+            <div style="display: flex; justify-content: space-between; color: #e63946; font-weight: bold;">
+                <span id="side-p2-name"></span> <span id="side-p2-score" style="color: white;"></span>
             </div>
         </div>
-
-        <!-- Player 2 Zone -->
-        <div id="p2-zone" style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; transition: box-shadow 0.3s, opacity 0.3s; background: linear-gradient(225deg, #ffe066 0%, #ffd700 100%);">
-            <div class="player-box" id="p2-area" style="width: 80%; max-width: 400px; margin-bottom: 30px;">
-                <h3 id="p2-name-display">Player 2</h3>
-                <div class="bpm-display" id="p2-bpm">--</div>
-                <p>Record: <span id="p2-result">0</span> BPM</p>
-            </div>
-            <button id="start-p2-btn" onclick="startTurn(2)" style="margin-bottom: 20px;">START PLAYER 2</button>
+        <div style="flex-grow: 1;">
+            <h3 style="color: #ffde00; font-size: 0.9rem; text-align: center;">🏆 TOP CALMEST</h3>
+            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; color: white;">
+                <thead>
+                    <tr style="color: #00f2ff; text-align: left; border-bottom: 1px solid #415a77;">
+                        <th>#</th>
+                        <th>Name</th>
+                        <th style="text-align: right;">Score</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-list">
+                </tbody>
+            </table>
         </div>
-
-        <!-- Results Sidebar (hidden by default) -->
-        <div id="results-sidebar" style="flex: 1.2; display: none; background: rgba(13, 27, 42, 0.95); border: 1px solid #00f2ff; border-radius: 15px; padding: 15px; flex-direction: column;">
-            <h2 style="color: #00f2ff; text-align: center; font-size: 1.2rem; margin-top: 0;">MATCH RESULTS</h2>
-            <div style="margin-bottom: 15px; border-bottom: 1px solid #415a77; padding-bottom: 10px;">
-                <div style="display: flex; justify-content: space-between; color: #e63946; font-weight: bold;">
-                    <span id="side-p1-name"></span> <span id="side-p1-score" style="color: white;"></span>
-                </div>
-                <div style="display: flex; justify-content: space-between; color: #e63946; font-weight: bold;">
-                    <span id="side-p2-name"></span> <span id="side-p2-score" style="color: white;"></span>
-                </div>
-            </div>
-            <div style="flex-grow: 1;">
-                <h3 style="color: #ffde00; font-size: 0.9rem; text-align: center;">🏆 TOP CALMEST</h3>
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; color: white;">
-                    <thead>
-                        <tr style="color: #00f2ff; text-align: left; border-bottom: 1px solid #415a77;">
-                            <th>#</th>
-                            <th>Name</th>
-                            <th style="text-align: right;">Score</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboard-list">
-                    </tbody>
-                </table>
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px;">
-                <button onclick="window.location.href='photo.html'" style="background: #00f2ff; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer;">📸 PHOTOBOOTH</button>
-                <button onclick="window.location.href='index.html'" style="background: transparent; border: 1px solid #415a77; color: #778da9; padding: 8px; border-radius: 5px; cursor: pointer;">NEXT PLAYERS</button>
-            </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px;">
+            <button onclick="window.location.href='photo.html'" style="background: #00f2ff; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer;">📸 PHOTOBOOTH</button>
+            <button onclick="window.location.href='index.html'" style="background: transparent; border: 1px solid #415a77; color: #778da9; padding: 8px; border-radius: 5px; cursor: pointer;">NEXT PLAYERS</button>
         </div>
     </div>
 
@@ -98,13 +120,10 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script src="js/firebase-config.js"></script>
-
     <script src="js/serial.js"></script>
     <script src="js/battle.js"></script>
     <script src="js/leaderboard.js"></script>
     <script>
-        // Initialize real-time leaderboard sync for the sidebar (Top 5 only)
-        // Wait for Firebase to be fully initialized
         window.addEventListener('load', function() {
             setTimeout(() => {
                 try {
@@ -116,7 +135,7 @@
                 } catch (error) {
                     console.error('Error initializing leaderboard sync:', error);
                 }
-            }, 1000); // Wait 1 second for all scripts to load
+            }, 1000);
         });
     </script>
 </body>
