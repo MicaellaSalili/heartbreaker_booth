@@ -28,7 +28,7 @@
     padding: 14px 32px;
     border-radius: 30px;
     border: none;
-    background: #ff2d2d;
+    background: #ff0000;
     color: white;
     font-weight: bold;
     font-size: 1.1rem;
@@ -102,7 +102,7 @@ body {
 /* Red Header Title */
 .red-header {
     width: 100%;
-    background: #e53935;
+    background: #ff0000;
     color: #fff;
     text-align: center;
     font-size: 2.2rem;
@@ -145,7 +145,7 @@ body {
 .hb-form-row input {
     background: #fff;
     color: #333;
-    border: 3px solid #e53935;
+    border: 3px solid #ff0000;
     border-radius: 0;
     font-size: 1rem;
     font-family: inherit;
@@ -160,9 +160,9 @@ body {
 }
 
 .hb-form-row input:focus {
-    border-color: #b71c1c;
+    border-color: #ff0000;
     color: #000;
-    box-shadow: 0 0 0 2px rgba(229, 57, 53, 0.2);
+    box-shadow: 0 0 0 2px rgba(255, 0, 0, 0.2);
 }
 
 .hb-form-row input::placeholder {
@@ -176,7 +176,7 @@ body {
     margin-top: 12px;
     padding: 16px 60px;
     min-width: 320px;
-    background: #e53935;
+    background: #ff0000;
     color: #fff;
     font-size: 1.2rem;
     font-weight: bold;
@@ -189,7 +189,7 @@ body {
 }
 
 .hb-btn:hover {
-    background: #b71c1c;
+    background: #ff0000;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -243,7 +243,7 @@ body {
 
 .leaderboard-table th {
     background: #000;
-    color: #e53935;
+    color: #ff0000;
     font-weight: bold;
     font-size: 1.1rem;
     letter-spacing: 3px;
@@ -366,7 +366,7 @@ body {
 /* Battle Header */
 .battle-header {
     width: 100%;
-    background: #e53935;
+    background: #ff0000;
     color: #fff;
     text-align: center;
     font-size: 2rem;
@@ -425,8 +425,8 @@ body {
 }
 
 .connect-btn:hover {
-    background: #b71c1c;
-    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.3);
+    background: #ff0000;
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.3);
 }
 
 /* Graph Container */
@@ -462,7 +462,7 @@ body {
 }
 
 .timer-display {
-    background: #e53935;
+    background: #ff0000;
     color: #fff;
     font-size: 3.5rem;
     font-weight: bold;
@@ -473,7 +473,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(229, 57, 53, 0.4);
+    box-shadow: 0 4px 20px rgba(255, 0, 0, 0.4);
 }
 
 /* Right Side: Player Zones */
@@ -543,7 +543,7 @@ body {
 
 /* Player Start Buttons */
 .player-start-btn {
-    background: #e53935;
+    background: #ff0000;
     color: #fff;
     border: none;
     padding: 14px 40px;
@@ -557,8 +557,8 @@ body {
 }
 
 .player-start-btn:hover {
-    background: #b71c1c;
-    box-shadow: 0 4px 12px rgba(229, 57, 53, 0.4);
+    background: #ff0000;
+    box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4);
 }
 
 .player-start-btn-disabled {

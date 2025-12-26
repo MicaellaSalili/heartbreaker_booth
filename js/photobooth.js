@@ -89,33 +89,9 @@ frame.onload = () => {
     updatePreview();
 };
 
-document.getElementById('snap-btn').onclick = () => takeSnapshot();
+
 document.getElementById('snap-btn').onclick = () => startCaptureWithTimer();
 document.getElementById('retake-btn').onclick = () => retake();
-
-function takeSnapshot() {
-    // Capture the current frame from video
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = video.videoWidth;
-    tempCanvas.height = video.videoHeight;
-    const tCtx = tempCanvas.getContext('2d');
-    tCtx.drawImage(video, 0, 0);
-    
-    snapshots[currentStep] = tempCanvas;
-    updatePreview();
-
-    // Show Retake option and Next/Download option
-    document.getElementById('retake-btn').style.display = 'inline-block';
-    const snapBtn = document.getElementById('snap-btn');
-
-    if (currentStep === 0) {
-        snapBtn.innerText = "NEXT: PLAYER 2 ➡️";
-        snapBtn.onclick = () => startPlayer2();
-    } else {
-        snapBtn.innerText = "📥 DOWNLOAD RESULT";
-        snapBtn.onclick = () => downloadFinal();
-    }
-}
 
 function startCaptureWithTimer() {
     // Disable snap button during timer
@@ -148,21 +124,28 @@ function takeSnapshot() {
 
     if (currentStep === 0) {
         snapBtn.innerText = "NEXT: PLAYER 2 ➡️";
-        snapBtn.onclick = () => startPlayer2();
+        snapBtn.onclick = () => startPlayer2WithTimer();
     } else {
         snapBtn.innerText = "📥 DOWNLOAD RESULT";
         snapBtn.onclick = () => downloadFinal();
     }
+// Helper to start Player 2 with timer
+function startPlayer2WithTimer() {
+    startPlayer2();
+    // After switching to Player 2, require timer for next capture
+    const snapBtn = document.getElementById('snap-btn');
+    snapBtn.onclick = () => startCaptureWithTimer();
+}
 }
 
 function retake() {
     snapshots[currentStep] = null;
     updatePreview();
-    
+
     document.getElementById('retake-btn').style.display = 'none';
     const snapBtn = document.getElementById('snap-btn');
     snapBtn.innerText = "📸 CAPTURE PHOTO";
-    snapBtn.onclick = () => takeSnapshot();
+    snapBtn.onclick = () => startCaptureWithTimer();
 }
 
 
@@ -176,62 +159,22 @@ function updateStatus(text, color) {
 // Initial Page Load
 updateStatus("Ready Player 1?", "#e63946");
 
-document.getElementById('snap-btn').onclick = () => takeSnapshot();
-
-function takeSnapshot() {
-    // Capture from video
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = video.videoWidth;
-    tempCanvas.height = video.videoHeight;
-    const tCtx = tempCanvas.getContext('2d');
-    tCtx.drawImage(video, 0, 0);
-    
-    snapshots[currentStep] = tempCanvas;
-    updatePreview();
-
-    // Change status after snapping
-    updateStatus("Looking good, Player " + (currentStep + 1) + "?", "#00f2ff");
-
-    document.getElementById('retake-btn').style.display = 'inline-block';
-    const snapBtn = document.getElementById('snap-btn');
-
-    if (currentStep === 0) {
-        snapBtn.innerText = "CONFIRM & NEXT ➡️";
-        snapBtn.onclick = () => startPlayer2();
-    } else {
-        snapBtn.innerText = "📥 DOWNLOAD RESULT";
-        snapBtn.onclick = () => downloadFinal();
-    }
-}
-
-function retake() {
-    snapshots[currentStep] = null;
-    updatePreview();
-    
-    // Revert status back to "Ready"
-    updateStatus("Ready Player " + (currentStep + 1) + "?", "#e63946");
-    
-    document.getElementById('retake-btn').style.display = 'none';
-    const snapBtn = document.getElementById('snap-btn');
-    snapBtn.innerText = "📸 CAPTURE PHOTO";
-    snapBtn.onclick = () => takeSnapshot();
-}
 
 function startPlayer2() {
     currentStep = 1;
     // Now it only says "Ready Player 2" AFTER Player 1 has confirmed
     updateStatus("Ready Player 2?", "#e63946");
-    
+
     document.getElementById('retake-btn').style.display = 'none';
     const snapBtn = document.getElementById('snap-btn');
     snapBtn.innerText = "📸 CAPTURE PHOTO";
-    snapBtn.onclick = () => takeSnapshot();
+    snapBtn.onclick = () => startCaptureWithTimer();
 }
 
 
 function updatePreview() {
     pCtx.clearRect(0, 0, previewCanvas.width, previewCanvas.height);
-    
+
     const vW = video.videoWidth;
     const vH = video.videoHeight;
     const sW = vW;
@@ -259,7 +202,7 @@ function downloadFinal() {
     finalCanvas.height = frame.height;
     const fCtx = finalCanvas.getContext('2d');
 
-    // Redraw everything high-res
+    // Redraw everything high-res (no mirroring needed)
     updatePreview(); // Ensure pCtx is fresh
     fCtx.drawImage(previewCanvas, 0, 0);
     fCtx.drawImage(frame, 0, 0);
