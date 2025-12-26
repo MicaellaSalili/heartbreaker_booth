@@ -11,7 +11,7 @@
 </head>
 <body>
     <!-- Red Header -->
-    <div class="battle-header">HEARTBREAK BATTLE</div>
+    <div class="battle-header">HEARTBREAKER CHALLENGE</div>
 
     <!-- Main Battle Container -->
     <div class="battle-container">
@@ -30,13 +30,10 @@
             </div>
 
             <!-- Timer -->
-            <div class="timer-wrapper">
+            <div class="timer-wrapper" id="timer-area">
                 <div id="timer-display" class="timer-display">20s</div>
             </div>
         </div>
-
-        <!-- Center Divider -->
-        <div class="battle-divider"></div>
 
         <!-- Right Side: Player Zones -->
         <div class="battle-right">
@@ -60,58 +57,6 @@
                 </div>
                 <button id="start-p2-btn" onclick="startTurn(2)" class="player-start-btn player-start-btn-disabled">Start Player 2</button>
             </div>
-        </div>
-    </div>
-
-    <!-- Match Results Overlay -->
-    <div id="match-results-overlay" style="display: none; position: fixed; inset: 0; background: #050a0f; z-index: 1000; flex-direction: column; align-items: center; justify-content: center;">
-        <div style="display: flex; width: 100%; height: 75vh;">
-            <div id="winner-side" style="flex: 1; background: #06331a; display: flex; flex-direction: column; align-items: center; justify-content: center; border-right: 5px solid #00ff88;">
-                <div style="color: #ffde00; font-size: 2.5rem; font-weight: bold; margin-bottom: 20px;">🏆 WINNER</div>
-                <h2 id="winner-name" style="color: white; font-size: 6rem; text-transform: uppercase; margin: 0;">--</h2>
-                <div id="winner-score" style="font-size: 15rem; font-weight: 900; color: #00ff88; margin: -20px 0;">--</div>
-                <p style="color: white; font-size: 3rem; letter-spacing: 10px;">BPM</p>
-            </div>
-            <div id="loser-side" style="flex: 1; background: #330606; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.6;">
-                <div style="color: #ff4b2b; font-size: 2rem; font-weight: bold; margin-bottom: 20px;">💔 LOSER</div>
-                <h2 id="loser-name" style="color: white; font-size: 4rem; text-transform: uppercase; margin: 0;">--</h2>
-                <div id="loser-score" style="font-size: 10rem; font-weight: 900; color: #ff4b2b; margin: -10px 0;">--</div>
-                <p style="color: white; font-size: 2rem;">BPM</p>
-            </div>
-        </div>
-        <button onclick="console.log('=== STATIC HTML BUTTON CLICKED ==='); goToPhotobooth();" style="margin-top: 40px; padding: 30px 80px; background: #00f2ff; border: none; border-radius: 60px; font-weight: 900; font-size: 2.5rem; cursor: pointer; color: black; box-shadow: 0 10px 30px rgba(0, 242, 255, 0.4);">
-            📸 GO TO PHOTOBOOTH
-        </button>
-    </div>
-
-    <!-- Results Sidebar (hidden by default) -->
-    <div id="results-sidebar" style="display: none; position: fixed; right: 0; top: 0; width: 320px; height: 100vh; background: rgba(13, 27, 42, 0.95); border-left: 1px solid #00f2ff; padding: 15px; flex-direction: column; z-index: 100;">
-        <h2 style="color: #00f2ff; text-align: center; font-size: 1.2rem; margin-top: 0;">MATCH RESULTS</h2>
-        <div style="margin-bottom: 15px; border-bottom: 1px solid #415a77; padding-bottom: 10px;">
-            <div style="display: flex; justify-content: space-between; color: #e63946; font-weight: bold;">
-                <span id="side-p1-name"></span> <span id="side-p1-score" style="color: white;"></span>
-            </div>
-            <div style="display: flex; justify-content: space-between; color: #e63946; font-weight: bold;">
-                <span id="side-p2-name"></span> <span id="side-p2-score" style="color: white;"></span>
-            </div>
-        </div>
-        <div style="flex-grow: 1;">
-            <h3 style="color: #ffde00; font-size: 0.9rem; text-align: center;">🏆 TOP CALMEST</h3>
-            <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; color: white;">
-                <thead>
-                    <tr style="color: #00f2ff; text-align: left; border-bottom: 1px solid #415a77;">
-                        <th>#</th>
-                        <th>Name</th>
-                        <th style="text-align: right;">Score</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-list">
-                </tbody>
-            </table>
-        </div>
-        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 15px;">
-            <button onclick="window.location.href='photo.html'" style="background: #00f2ff; border: none; padding: 10px; border-radius: 5px; font-weight: bold; cursor: pointer;">📸 PHOTOBOOTH</button>
-            <button onclick="window.location.href='index.html'" style="background: transparent; border: 1px solid #415a77; color: #778da9; padding: 8px; border-radius: 5px; cursor: pointer;">NEXT PLAYERS</button>
         </div>
     </div>
 

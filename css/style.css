@@ -1,3 +1,66 @@
+.photobooth-page button,
+.button-group button {
+    font-weight: bold !important;
+}
+/* Photobooth button font */
+.photobooth-page button,
+.button-group button {
+    font-family: 'Google Sans', Arial, sans-serif !important;
+}
+/* Player WIN/LOSE status label in player zones */
+.player-status-label {
+    margin-top: 18px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+/* Button row at bottom after match */
+#battle-btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 40px;
+}
+#battle-btn-row button {
+    flex: 1;
+    padding: 14px 32px;
+    border-radius: 30px;
+    border: none;
+    background: #ff2d2d;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+/* Player WIN/LOSE status label in player zones */
+.player-status-label {
+    margin-top: 18px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+/* Button row below graph after match */
+#battle-btn-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 0;
+}
+#battle-btn-row button {
+    flex: 1;
+    padding: 14px 32px;
+    border-radius: 30px;
+    border: none;
+    background: #ff2d2d;
+    color: white;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
 /* Reset and Base Styles */
 * {
     margin: 0;
@@ -373,17 +436,17 @@ body {
     align-items: center;
     justify-content: center;
     width: 100%;
-    max-width: 500px;
+    max-width: 700px;
 }
 
 .graph-container {
     width: 100%;
-    height: 250px;
+    height: 300px;
     background: #fff;
     border: 2px solid #ddd;
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 15px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 .graph-container canvas {
@@ -411,13 +474,6 @@ body {
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 20px rgba(229, 57, 53, 0.4);
-}
-
-/* Center Divider */
-.battle-divider {
-    width: 3px;
-    background: #e53935;
-    min-height: 100%;
 }
 
 /* Right Side: Player Zones */

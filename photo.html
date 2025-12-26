@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <title>Heartbreaker - Photobooth</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
-
-    <div class="photobooth-page" style="display: flex; height: 100vh; background: #0d1b2a; color: white; font-family: 'Segoe UI', sans-serif;">
+    <div class="photobooth-page" style="display: flex; height: 100vh; background: #000000; color: white;">
         <div class="capture-section" style="flex: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; border-right: 2px solid #1b263b;">
             <h1 style="font-size: 3rem; margin-bottom: 10px;">Players Photobooth</h1>
             <h2 id="capture-status" style="color: #e63946; margin-bottom: 30px; font-weight: bold;">Ready Player 1?</h2>
@@ -17,9 +18,9 @@
                 <div style="position: absolute; top: 20px; left: 20px; background: rgba(230, 57, 70, 0.8); padding: 5px 15px; border-radius: 5px; font-size: 0.8rem;">● LIVE</div>
             </div>
             <div class="button-group" style="margin-top: 40px; display: flex; gap: 20px;">
-                <button id="snap-btn" style="background: #415a77; color: white; border: none; padding: 15px 40px; border-radius: 10px; font-size: 1.2rem; cursor: pointer; transition: 0.3s;">📸 CAPTURE</button>
-                <button id="retake-btn" style="display: none; background: #1b263b; color: #778da9; border: 1px solid #415a77; padding: 15px 40px; border-radius: 10px; font-size: 1.2rem; cursor: pointer;">🔄 RETAKE</button>
-                <button id="finish-btn" onclick="resetBooth()" style="background: #1b263b; color: #778da9; border: none; padding: 15px 40px; border-radius: 10px; font-size: 1.2rem; cursor: pointer;">FINISH</button>
+                <button id="snap-btn" style="background: #ff0000; color: white; border: none; padding: 15px 40px; border-radius: 10px; font-size: 1.2rem; cursor: pointer; transition: 0.3s;">📸 CAPTURE</button>
+                <button id="retake-btn" style="display: none; background: #ff0202; color: #ffffff; border: 1px solid #415a77; padding: 15px 40px; border-radius: 10px; font-size: 1.2rem; cursor: pointer;">🔄 RETAKE</button>
+                <button id="finish-btn" onclick="resetBooth()" style="background: #ff0000; color: #ffffff; border: none; padding: 15px 40px; border-radius: 10px; font-size: 1.2rem; cursor: pointer;">FINISH</button>
             </div>
         </div>
         <div class="preview-section" style="flex: 1; background: #ffffff; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px;">

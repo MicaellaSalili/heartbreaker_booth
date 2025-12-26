@@ -263,106 +263,110 @@ async function determineWinner() {
     console.log("determineWinner() called!");
     console.log("Player scores - p1Score:", p1Score, "p2Score:", p2Score);
     
-    // Cooperative logic: Both players try to reach 100 BPM or more
-    let p1Reached = p1Score >= 100;
-    let p2Reached = p2Score >= 100;
-    let resultText = "";
-    let canAccessPhotobooth = false;
-    if (p1Reached && p2Reached) {
-        resultText = `Both players reached 100 BPM!`;
-        canAccessPhotobooth = true;
-    } else if (p1Reached) {
-        resultText = `${p1Name} reached 100 BPM!`;
-        canAccessPhotobooth = true;
-    } else if (p2Reached) {
-        resultText = `${p2Name} reached 100 BPM!`;
-        canAccessPhotobooth = true;
-    } else {
-        resultText = `Neither player reached 100 BPM.`;
-    }
+        // Show results in player zones
+        document.getElementById('p1-bpm').innerText = p1Score;
+        document.getElementById('p2-bpm').innerText = p2Score;
+        document.getElementById('p1-result').innerText = p1Score;
+        document.getElementById('p2-result').innerText = p2Score;
 
-    console.log("Result text:", resultText);
-    console.log("Can access photobooth:", canAccessPhotobooth);
-
-    // Show cooperative match results overlay
-    const overlay = document.getElementById('match-results-overlay');
-    console.log("Found overlay element:", overlay);
-    
-    if (overlay) {
-        // Build buttons based on result
-        let buttonsHTML = '';
-        if (canAccessPhotobooth) {
-            buttonsHTML = `
-                <button id="go-photobooth-btn" style="margin:2vw 1vw 0 1vw;padding:1vw 2vw;font-size:1.5vw;background:#00f2ff;color:#000;border:none;border-radius:2vw;box-shadow:0 0 20px #00f2ff;cursor:pointer;">📸 Go to Photobooth</button>
-                <button id="back-home-btn" style="margin:2vw 1vw 0 1vw;padding:1vw 2vw;font-size:1.5vw;background:#222;color:#fff;border:none;border-radius:2vw;box-shadow:0 0 20px #888;cursor:pointer;">🏠 Back to Home</button>
-            `;
+        let p1Status = '';
+        let p2Status = '';
+        if (p1Score >= 100 && p2Score >= 100) {
+            p1Status = `${p1Name} WINS!`;
+            p2Status = `${p2Name} WINS!`;
+        } else if (p1Score >= 100 && p2Score < 100) {
+            p1Status = `${p1Name} WINS!`;
+            p2Status = `${p2Name} LOSES`;
+        } else if (p1Score < 100 && p2Score >= 100) {
+            p1Status = `${p1Name} LOSES`;
+            p2Status = `${p2Name} WINS!`;
         } else {
-            buttonsHTML = `
-                <button id="try-again-btn" style="margin:2vw 1vw 0 1vw;padding:1vw 2vw;font-size:1.5vw;background:#e63946;color:#fff;border:none;border-radius:2vw;box-shadow:0 0 20px #e63946;cursor:pointer;">🔄 Try Again</button>
-                <button id="back-home-btn" style="margin:2vw 1vw 0 1vw;padding:1vw 2vw;font-size:1.5vw;background:#222;color:#fff;border:none;border-radius:2vw;box-shadow:0 0 20px #888;cursor:pointer;">🏠 Back to Home</button>
-            `;
+            p1Status = `${p1Name} LOSES`;
+            p2Status = `${p2Name} LOSES`;
         }
-        
-        console.log("Setting overlay innerHTML...");
-        overlay.innerHTML = `
-            <div style="width:100%;text-align:center;">
-                <div style="font-size:3vw;color:#00f2ff;text-shadow:0 0 10px #00f2ff;">${resultText}</div>
-                <div style="display:flex;justify-content:center;align-items:center;margin-top:2vw;">
-                    <div style="flex:1;text-align:center;">
-                        <div style="font-size:2vw;color:#fff;">${p1Name}</div>
-                        <div style="font-size:6vw;color:#00ff99;">${p1Score}</div>
-                        <div style="font-size:1.5vw;color:#fff;">BPM</div>
-                    </div>
-                    <div style="flex:1;text-align:center;">
-                        <div style="font-size:2vw;color:#fff;">${p2Name}</div>
-                        <div style="font-size:6vw;color:#00ff99;">${p2Score}</div>
-                        <div style="font-size:1.5vw;color:#fff;">BPM</div>
-                    </div>
-                </div>
-                ${buttonsHTML}
-            </div>
-        `;
-        overlay.style.display = 'flex';
-        console.log("Overlay should now be visible!");
-        
-        // Attach button listeners
-        setTimeout(() => {
-            console.log("Attaching button listeners...");
-            
-            const goPhotoboothBtn = document.getElementById('go-photobooth-btn');
-            if (goPhotoboothBtn) {
-                console.log("Photo booth button found, attaching click handler");
-                goPhotoboothBtn.onclick = () => {
-                    console.log("Photo booth button clicked!");
+
+        // Show WIN/LOSE labels in player zones
+        let p1StatusEl = document.getElementById('p1-status-label');
+        let p2StatusEl = document.getElementById('p2-status-label');
+        if (!p1StatusEl) {
+            p1StatusEl = document.createElement('div');
+            p1StatusEl.id = 'p1-status-label';
+            p1StatusEl.className = 'player-status-label';
+            document.getElementById('p1-area').appendChild(p1StatusEl);
+        }
+        if (!p2StatusEl) {
+            p2StatusEl = document.createElement('div');
+            p2StatusEl.id = 'p2-status-label';
+            p2StatusEl.className = 'player-status-label';
+            document.getElementById('p2-area').appendChild(p2StatusEl);
+        }
+        p1StatusEl.innerText = p1Status;
+        p2StatusEl.innerText = p2Status;
+
+        // Set player area background: red for win, black for lose
+        const p1Zone = document.getElementById('p1-zone');
+        const p2Zone = document.getElementById('p2-zone');
+        // Reset opacity for both zones
+        if (p1Zone) p1Zone.style.opacity = '1.0';
+        if (p2Zone) p2Zone.style.opacity = '1.0';
+        if (p1Zone) {
+            if (p1Score >= 100) {
+                p1Zone.style.background = '#ff2d2d';
+                p1Zone.style.color = '#fff';
+            } else {
+                p1Zone.style.background = '#000';
+                p1Zone.style.color = '#fff';
+            }
+        }
+        if (p2Zone) {
+            if (p2Score >= 100) {
+                p2Zone.style.background = '#ff2d2d';
+                p2Zone.style.color = '#fff';
+            } else {
+                p2Zone.style.background = '#000';
+                p2Zone.style.color = '#fff';
+            }
+        }
+
+        // Hide start buttons
+        if (document.getElementById('start-p1-btn')) document.getElementById('start-p1-btn').style.display = 'none';
+        if (document.getElementById('start-p2-btn')) document.getElementById('start-p2-btn').style.display = 'none';
+
+        // Replace timer-wrapper with correct buttons below the graph
+        const timerArea = document.getElementById('timer-area');
+        if (timerArea) {
+            const btnRow = document.createElement('div');
+            btnRow.id = 'battle-btn-row';
+            btnRow.style.display = 'flex';
+            btnRow.style.justifyContent = 'center';
+            btnRow.style.gap = '20px';
+            btnRow.style.marginTop = '0';
+            let anyWin = (p1Score >= 100) || (p2Score >= 100);
+            if (anyWin) {
+                btnRow.innerHTML = `
+                    <button id="go-photobooth-btn" class="overlay-buttons">Photobooth</button>
+                    <button id="back-home-btn" class="overlay-buttons">Home</button>
+                `;
+            } else {
+                btnRow.innerHTML = `
+                    <button id="try-again-btn" class="overlay-buttons">TRY AGAIN</button>
+                    <button id="back-home-btn" class="overlay-buttons">Home</button>
+                `;
+            }
+            timerArea.replaceWith(btnRow);
+            if (anyWin) {
+                document.getElementById('go-photobooth-btn').onclick = () => {
                     saveAndNavigate('photo.html');
                 };
             } else {
-                console.log("Photo booth button not found!");
-            }
-
-            const backHomeBtn = document.getElementById('back-home-btn');
-            if (backHomeBtn) {
-                console.log("Back home button found, attaching click handler");
-                backHomeBtn.onclick = () => {
-                    console.log("Back home button clicked!");
-                    saveAndNavigate('index.html');
-                };
-            } else {
-                console.log("Back home button not found!");
-            }
-            
-            const tryAgainBtn = document.getElementById('try-again-btn');
-            if (tryAgainBtn) {
-                console.log("Try again button found, attaching click handler");
-                tryAgainBtn.onclick = () => {
-                    console.log("Try again button clicked!");
+                document.getElementById('try-again-btn').onclick = () => {
                     window.location.reload();
                 };
             }
-        }, 100);
-    } else {
-        console.error("Could not find match-results-overlay element!");
-    }
+            document.getElementById('back-home-btn').onclick = () => {
+                saveAndNavigate('index.html');
+            };
+        }
 }
 
 // Save match result to Firebase

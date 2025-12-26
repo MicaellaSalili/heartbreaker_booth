@@ -177,8 +177,11 @@ function downloadFinal() {
     fCtx.drawImage(previewCanvas, 0, 0);
     fCtx.drawImage(frame, 0, 0);
 
+    const p1Name = localStorage.getItem('p1Name') || 'player1';
+    const p2Name = localStorage.getItem('p2Name') || 'player2';
+    const fileName = `${p1Name}_${p2Name}.png`;
     const link = document.createElement('a');
-    link.download = `Heartbreaker_Battle.png`;
+    link.download = fileName;
     link.href = finalCanvas.toDataURL("image/png");
     link.click();
 }
