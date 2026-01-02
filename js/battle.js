@@ -8,6 +8,14 @@ window.addEventListener('error', function(e) {
 
 console.log("Battle.js loaded - starting initialization");
 
+// Reference to status text update function from serial.js
+function updateStatusText(text) {
+    const statusText = document.getElementById('status-text');
+    if (statusText) {
+        statusText.innerText = text;
+    }
+}
+
 // Move player variables to top level for global access
 let currentPlayer = 1;
 let p1Score = 0;
@@ -137,92 +145,242 @@ function setActivePlayer(playerNumber) {
     }
 }
 
+// Global button references
+let p1Btn, p2Btn, timerDisplay;
+
 // On load, default to Player 1 active
 window.addEventListener('DOMContentLoaded', function() {
     console.log("DOM Content Loaded - initializing battle page");
     console.log("Player names from localStorage:", {p1Name, p2Name});
+    
+    // Get button references AFTER DOM is loaded
+    p1Btn = document.getElementById('start-p1-btn');
+    p2Btn = document.getElementById('start-p2-btn');
+    timerDisplay = document.getElementById('timer-display');
+    
+    console.log("Button elements found:", {p1Btn, p2Btn, timerDisplay});
+    
     setActivePlayer(1);
+    
+    // Set player names in UI
+    if (document.getElementById('p1-name-display')) {
+        document.getElementById('p1-name-display').innerText = p1Name;
+    }
+    if (document.getElementById('p2-name-display')) {
+        document.getElementById('p2-name-display').innerText = p2Name;
+    }
+    
+    // Initial button states - both disabled until connection
+    if (p1Btn && p2Btn) {
+        p1Btn.disabled = true;
+        p2Btn.disabled = true;
+        p1Btn.style.display = 'none';
+        p2Btn.style.display = 'none';
+        
+        // Add click event listeners with connection check
+        p1Btn.addEventListener('click', () => {
+            console.log("Player 1 button clicked");
+            if (window.isConnected === true) {
+                startTurn(1);
+            } else {
+                alert('Please connect to Arduino first!');
+            }
+        });
+        
+        p2Btn.addEventListener('click', () => {
+            console.log("Player 2 button clicked");
+            if (window.isConnected === true) {
+                startTurn(2);
+            } else {
+                alert('Please connect to Arduino first!');
+            }
+        });
+    }
     
     // Make goToPhotobooth available globally for debugging
     window.goToPhotobooth = goToPhotobooth;
     console.log("goToPhotobooth function attached to window");
 });
 
-// Button references
-const p1Btn = document.getElementById('start-p1-btn');
-const p2Btn = document.getElementById('start-p2-btn');
-const timerDisplay = document.getElementById('timer-display');
-
-// Set player names in UI
-if (document.getElementById('p1-name-display')) {
-    document.getElementById('p1-name-display').innerText = p1Name;
-}
-if (document.getElementById('p2-name-display')) {
-    document.getElementById('p2-name-display').innerText = p2Name;
-}
-
-// Initial button states
-if (p1Btn && p2Btn) {
-    p1Btn.disabled = false;
-    p2Btn.disabled = true;
-}
-
 // Listen for BPM updates from serial.js
 document.addEventListener('bpmUpdate', (e) => {
     const bpm = e.detail;
+    console.log("📊 BPM Update received:", bpm, "| Recording:", isRecording, "| Current Player:", currentPlayer);
 
     // 1. Always update the live graph
     updateGraph(bpm);
 
-    // 2. Only update player scores and BPM display if timer is running
-    if (isRecording) {
-        if (currentPlayer === 1) {
-            document.getElementById('p1-bpm').innerText = bpm;
-            p1Score = bpm;
+    // 2. Always show real-time BPM for current player (even when not recording)
+    if (currentPlayer === 1) {
+        const p1BpmEl = document.getElementById('p1-bpm');
+        if (p1BpmEl) {
+            p1BpmEl.innerText = bpm;
+            console.log("✓ Updated Player 1 BPM display to:", bpm);
         } else {
-            document.getElementById('p2-bpm').innerText = bpm;
+            console.error("❌ p1-bpm element not found!");
+        }
+        // Only update score if timer is running
+        if (isRecording) {
+            p1Score = bpm;
+            console.log("✓ Updated Player 1 score to:", bpm);
+        }
+    } else if (currentPlayer === 2) {
+        const p2BpmEl = document.getElementById('p2-bpm');
+        if (p2BpmEl) {
+            p2BpmEl.innerText = bpm;
+            console.log("✓ Updated Player 2 BPM display to:", bpm);
+        } else {
+            console.error("❌ p2-bpm element not found!");
+        }
+        // Only update score if timer is running
+        if (isRecording) {
             p2Score = bpm;
+            console.log("✓ Updated Player 2 score to:", bpm);
         }
     }
 });
 
 // Graph update helper
 function updateGraph(bpm) {
-    graphData.push(bpm);
-    graphData.shift();
-    pulseChart.update();
+    if (!graphData || !pulseChart) {
+        console.warn('Graph not initialized');
+        return;
+    }
+    
+    // Validate BPM value
+    if (typeof bpm === 'number' && bpm >= 0 && bpm <= 250) {
+        graphData.push(bpm);
+        graphData.shift();
+        pulseChart.update();
+    }
 }
 
-document.getElementById('connect-btn').onclick = async () => {
-    await connectSerial();
-    document.getElementById('connect-btn').style.display = 'none';
-    document.getElementById('battle-ui').style.display = 'flex';
-    // Show both player buttons
-    if (p1Btn && p2Btn) {
-        p1Btn.style.display = 'inline-block';
-        p2Btn.style.display = 'inline-block';
+// Setup connect button handler after DOM loads
+window.addEventListener('DOMContentLoaded', function() {
+    const connectBtn = document.getElementById('connect-btn');
+    console.log("Connect button found:", connectBtn);
+    
+    if (connectBtn) {
+        connectBtn.onclick = async () => {
+        // Disable button during connection attempt
+        connectBtn.disabled = true;
+        connectBtn.innerText = 'Connecting...';
+        
+        const connected = await connectSerial();
+        
+        // Only proceed if connection was successful and a valid COM port was selected
+        if (connected && window.isConnected === true) {
+            connectBtn.style.display = 'none';
+            
+            // Show both player buttons only after successful connection
+            if (p1Btn && p2Btn) {
+                p1Btn.style.display = 'inline-block';
+                p2Btn.style.display = 'inline-block';
+                p1Btn.disabled = false; // Enable Player 1 button
+                p1Btn.classList.remove('player-start-btn-disabled'); // Remove disabled styling
+                p2Btn.disabled = true;  // Player 2 stays disabled until P1 finishes
+            }
+        } else {
+            console.log("Connection failed or invalid port selected");
+            // Re-enable connect button if connection failed
+            connectBtn.disabled = false;
+            connectBtn.innerText = 'Connect Heart Sensor';
+            
+            // Keep player buttons hidden and disabled
+            if (p1Btn) {
+                p1Btn.disabled = true;
+                p1Btn.style.display = 'none';
+            }
+            if (p2Btn) {
+                p2Btn.disabled = true;
+                p2Btn.style.display = 'none';
+            }
+        }
+    };
     }
-};
+});
 
 function startTurn(playerNum) {
+    console.log("=== startTurn() CALLED ===");
+    console.log("Player number:", playerNum);
+    console.log("window.isConnected:", window.isConnected);
+    console.log("isRecording:", isRecording);
+    console.log("timerDisplay element:", timerDisplay);
+    console.log("p1Btn element:", p1Btn);
+    console.log("p2Btn element:", p2Btn);
+    
+    // Check if serial connection is active before starting
+    if (!window.isConnected) {
+        alert("Please connect to a COM port first!");
+        return;
+    }
+    
+    // Prevent starting if already recording
+    if (isRecording) {
+        console.warn("Turn already in progress");
+        return;
+    }
+    
+    // Validate player number
+    if (playerNum !== 1 && playerNum !== 2) {
+        console.error("Invalid player number:", playerNum);
+        return;
+    }
+    
+    console.log(`✓ Starting turn for Player ${playerNum}`);
     currentPlayer = playerNum;
     isRecording = true;
     setActivePlayer(playerNum);
+    
+    // Update status to show we're recording
+    if (typeof updateStatusText === 'function') {
+        updateStatusText(`Recording Player ${playerNum} - Keep sensor on!`);
+    }
+    
     // Disable both buttons during recording
     if (p1Btn && p2Btn) {
         p1Btn.disabled = true;
         p2Btn.disabled = true;
+        console.log("✓ Buttons disabled");
     }
+    
+    // Start countdown - this captures BPM continuously for 20 seconds
     let timeLeft = countdown;
-    timerDisplay.innerText = timeLeft + "s";
+    console.log("✓ Starting countdown from:", timeLeft);
+    
+    if (timerDisplay) {
+        timerDisplay.innerText = timeLeft + "s";
+        console.log("✓ Timer display updated to:", timeLeft + "s");
+    } else {
+        console.error("❌ timerDisplay element not found!");
+    }
+    
+    // Clear any existing timer
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+    
+    console.log("✓ Setting up timer interval...");
     timerInterval = setInterval(() => {
         timeLeft--;
-        timerDisplay.innerText = timeLeft + "s";
+        console.log("Timer tick:", timeLeft);
+        
+        if (timerDisplay) {
+            timerDisplay.innerText = timeLeft + "s";
+        }
+        
         if (timeLeft <= 0) {
             clearInterval(timerInterval);
+            timerInterval = null;
+            console.log("✓ Timer complete!");
+            if (typeof updateStatusText === 'function') {
+                updateStatusText('Recording complete!');
+            }
             endTurn();
         }
     }, 1000);
+    
+    console.log("✓ Timer interval started, ID:", timerInterval);
 }
 
 function endTurn() {
@@ -233,21 +391,56 @@ function endTurn() {
 
     if (currentPlayer === 1) {
         console.log("Player 1 turn ending");
-        // Handle Player 1 completion
-        p1Score = typeof currentBPM !== 'undefined' ? currentBPM : p1Score;
+        // Handle Player 1 completion - p1Score is already updated from BPM events
         console.log("Player 1 final score:", p1Score);
         document.getElementById('p1-result').innerText = p1Score;
 
+        // Reset timer display
+        if (timerDisplay) {
+            timerDisplay.innerText = "20s";
+        }
+
         // UI updates to prepare for Player 2
-        alert("Player 1 Finished! Transfer the sensor to Player 2.");
-        if (p2Btn) p2Btn.disabled = false;
-        if (p1Btn) p1Btn.disabled = true;
+        showModal(
+            'Player 1 Complete!',
+            `<strong>Player 1 finished!</strong><br><br>Final BPM: <strong>${p1Score}</strong><br><br>Please transfer the heart sensor to <strong>Player 2</strong> and click "Start Player 2" to begin.`,
+            'success',
+            [{ 
+                text: 'Ready for Player 2', 
+                action: () => {
+                    // Enable Player 2 button and disable Player 1 button
+                    if (p2Btn) {
+                        p2Btn.disabled = false;
+                        p2Btn.style.display = 'inline-block';
+                        p2Btn.classList.remove('player-start-btn-disabled');
+                        console.log('✓ Player 2 button enabled');
+                    }
+                    if (p1Btn) {
+                        p1Btn.disabled = true;
+                        p1Btn.style.display = 'inline-block';
+                        p1Btn.classList.add('player-start-btn-disabled');
+                    }
+                    
+                    // Switch to Player 2
+                    currentPlayer = 2;
+                    setActivePlayer(2);
+                    
+                    if (typeof updateStatusText === 'function') {
+                        updateStatusText('Ready for Player 2!');
+                    }
+                } 
+            }]
+        );
     } else {
         console.log("Player 2 turn ending");
-        // Handle Player 2 completion
-        p2Score = typeof currentBPM !== 'undefined' ? currentBPM : p2Score;
+        // Handle Player 2 completion - p2Score is already updated from BPM events
         console.log("Player 2 final score:", p2Score);
         document.getElementById('p2-result').innerText = p2Score;
+
+        // Reset timer display
+        if (timerDisplay) {
+            timerDisplay.innerText = "20s";
+        }
 
         console.log("About to call determineWinner()");
         // CRITICAL: Call winner logic immediately after Player 2's 20s
